@@ -47,6 +47,10 @@ class VM:
         self.argument = MemorySegment(size=512)
         self.static = MemorySegment(size=256)
         self.constant = MemorySegment(size=256)
+        self.this = MemorySegment(size=256)
+        self.that = MemorySegment(size=256)
+        self.pointer = MemorySegment(size=256)
+        self.temp = MemorySegment(size=256)
 
         self.stack_obj = Stack()
 
@@ -68,7 +72,7 @@ class VM:
                 "temp" : self.pointer_base,
         }
 
-    def get_segment(self,segment_name):
+    def get_segment(self, segment_name):
         if segment_name == "local":
             return self.local
         elif segment_name == "argument":
@@ -97,7 +101,7 @@ class VM:
             if instruction_type not in ["goto", "if-goto"]:
                 self.pc += 1
 
-    def process_labels(program):
+    def process_labels(self, program):
         labels = {}
         address = 0
         for instruction in program:
@@ -193,7 +197,6 @@ class VM:
             operand = self.stack_obj.pop()
             result = not operand
             self.stack_obj.push(result)
-        
         elif instruction_type == "push":
             segment = arg1
             index = int(arg2)
